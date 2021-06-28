@@ -145,7 +145,9 @@ module Prawn
         # (We use this to determine the minimum width of a table cell)
         #
         def styled_width_of_longest_word
-          longest_word = @content.split(" ").max_by(&:length)
+          parts = ::Prawn::Text::Formatted::Parser.format(@content)
+          longest_word = parts.map { |t| t[:text].split(' ') }.flatten.max_by(&:length)
+          longest_word ||= 'M'
           styled_width_of(longest_word)
         end
       end
